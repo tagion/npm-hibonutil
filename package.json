@@ -1,0 +1,11 @@
+{
+  "name": "hibonutil",
+  "version": "0.1.0",
+  "description": "HiBON Util is a CLI for JSON-to-HiBON and HiBON-to-JSON converting.",
+  "main": "bin/hibonutil",
+  "scripts": {},
+  "bin": "./cli.js",
+  "keywords": [],
+  "author": "",
+  "license": "I25S ApS’ free and grant back license"
+}
