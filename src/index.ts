@@ -1,25 +1,17 @@
-// import { JSONCollector } from "./JSONCollector";
-// import { Server } from "./server";
-// import yargs from "yargs";
-import { HiBONJSON } from "./hibon/HiBON";
-// import { hibonutil } from "./tagion/hibonutil";
+import { HiBON, HiBONType } from "./hibon/HiBON";
 
-// const collector = new JSONCollector();
-// console.log(`Temp JSON: ${collector.filename}`);
+let result: boolean = true;
 
-// const argv = yargs(process.argv.slice(2))
-//   .options({ p: { type: "number", alias: "port" } })
-//   .parseSync();
+const hibon = new HiBON();
+result = hibon.set("bigint", HiBONType.INTBIG, "111111111");
+if (!result) console.log("FAIL");
+result = hibon.set("boolean", HiBONType.BOOLEAN, true);
+if (!result) console.log("FAIL");
+result = hibon.set("sub_hibon", HiBONType.HIBON, { subkey: ["type", -42] });
+if (!result) console.log("FAIL");
 
-// const server = new Server(collector, argv.p);
-// server.start();
+console.log(hibon.get("bigint", HiBONType.INTBIG));
+console.log(hibon.get("boolean", HiBONType.BOOLEAN));
+console.log(hibon.get("sub_hibon", HiBONType.HIBON));
 
-// hibonutil.sample();
-
-const test: HiBONJSON = {};
-test["bigint"] = ["big", "111111111"];
-test["boolean"] = true;
-test["sub_hibon"] = { subkey: ["type", -42] };
-// let jsonData: Record<string, string | number | [string, string | number]> = {};
-
-console.log(test);
+console.log(hibon.toJSON());
