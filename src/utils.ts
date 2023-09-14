@@ -1,23 +1,56 @@
-import { spawn } from "child_process";
+import { execSync, spawnSync } from "child_process";
+import crypto from "crypto";
 
-export function run_binary(command: string, args: string[]) {
-  // Run the binary application
-  const childProcess = spawn(command, args);
+export interface ExecutionResult {
+  code: number;
+  output: string;
+}
 
-  // Listen for output from the binary
-  childProcess.stdout.on("data", (data) => {
-    console.log(`Output from ${command}:`);
-    console.log(data.toString());
-  });
+export function runBinary(binary: string, args: string[]): ExecutionResult {
+  let result: ExecutionResult;
 
-  // Listen for errors
-  childProcess.stderr.on("data", (data) => {
-    console.error(`Error from ${command}:`);
-    console.error(data.toString());
-  });
+  try {
+    const console_output = execSync(`${binary} ${args.join(" ")}`, {
+      encoding: "utf-8",
+    });
+    result = { code: 0, output: console_output };
+  } catch (error: unknown) {
+    if (error instanceof Error) result = { code: 1, output: error.message };
+    else result = { code: 1, output: "Unknown error" };
+  }
 
-  // Listen for the binary process to exit
-  childProcess.on("close", (code) => {
-    console.log(`${command} exited with code ${code}`);
-  });
+  return result;
+}
+
+export function runBinaryWithBuffer(
+  command: string,
+  args: string[],
+  buffer: Buffer
+): Buffer | null {
+  try {
+    const result = spawnSync(command, args, {
+      input: buffer,
+      encoding: "buffer",
+    });
+
+    if (result.error) {
+      console.error(`Error: ${result.error.message}`);
+      return null;
+    }
+
+    const output = result.stdout.toString("binary");
+    return Buffer.from(output, "binary");
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
+
+export function generateTempFilename(extension: string): string {
+  const randomBytes = crypto.randomBytes(4).toString("hex").toUpperCase();
+  const timestamp = Date.now();
+
+  const filename = `tmp${randomBytes}${timestamp}.${extension}`;
+
+  return filename;
 }

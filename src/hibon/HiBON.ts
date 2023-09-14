@@ -29,7 +29,13 @@ export interface HiBONJSON {
 }
 
 export class HiBON {
-  private hibon: HiBONJSON = {};
+  private data: HiBONJSON = {};
+
+  constructor(buffer?: Buffer) {
+    if (buffer) {
+      this.data = JSON.parse(buffer.toString("utf8"));
+    }
+  }
 
   public set(key: string, type: HiBONType, value: ValueType) {
     if (
@@ -37,9 +43,9 @@ export class HiBON {
       type === HiBONType.STRING ||
       type === HiBONType.HIBON
     ) {
-      this.hibon[key] = value;
+      this.data[key] = value;
     } else if (isPrimitiveValue(value)) {
-      this.hibon[key] = [type, value];
+      this.data[key] = [type, value];
     } else {
       return false;
     }
@@ -48,7 +54,7 @@ export class HiBON {
   }
 
   public get(key: string, type: string) {
-    const value = this.hibon[key];
+    const value = this.data[key];
 
     if (
       type === HiBONType.BOOLEAN ||
@@ -69,12 +75,11 @@ export class HiBON {
     return undefined;
   }
 
-  public toJSON() {
-    return this.hibon;
+  public toJSON(): HiBONJSON {
+    return this.data;
   }
 
-  public toHiBON() {
-    // TBD:
-    // use hibonutil, catch output and put into binary data
+  public toJSONBuffer(): Buffer {
+    return Buffer.from(JSON.stringify(this.toJSON()));
   }
 }

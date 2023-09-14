@@ -6,7 +6,8 @@
   "scripts": {
     "test": "bash script/test_append_json.sh",
     "lint": "eslint src/ --ext .ts",
-    "build": "npm run lint && tsc && node src/index.js"
+    "build": "npm run lint && tsc && node src/index.js",
+    "dev-build": "tsc && node src/index.js"
   },
   "keywords": [],
   "author": "",
