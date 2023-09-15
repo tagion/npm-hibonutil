@@ -1,42 +1,38 @@
-# HiBON Util for NPM
+# HiBON-wrapper for NPM
 
-HiBON Util is a CLI for JSON-to-HiBON and HiBON-to-JSON converting.
+This project is planned as NPM module wrapper for HiBON using `hibonutil`
 
 > **Disclaimer**  
-> This software is in alpha stage. Errors and instabilities are expected.
+> This software is in development. Errors and instabilities are expected.
 >
-> The util works only with linux, tested on Ubuntu 20.04.  
+> The util works only with linux, tested on Ubuntu 23.04.  
 >
-> Cross-platform support is on the roadmap, but we can not announce any dates at this time.
+> Cross-platform not supported for now, since module uses linux-only binary
 
 ## Gettings Started
 
+To use this module `hibonutil` need to be installed.
+You can check this with commmand
 ```
-npm i -g hibonutil
-hibonutil --help
+hibonutil --version
 ```
 
-## Usage
+To get started you can run following command from root directory
 ```
-./hibonutil [<option>...] <in-file> <out-file>
-./hibonutil [<option>...] <in-file>
+npm run build
+```
 
-<option>:
-      --version Display the version
--i  --inputfile Sets the input file name
--o --outputfile Sets the output file name
--b        --bin Use HiBON or else use JSON
--V      --value Bill value : default: 1000000000
--p     --pretty JSON Pretty print: Default: false
--h       --help This help information.
-```
+## Scructure
+
+- `src/` source files for this module
+  - `src/hibon/` structure that contains HiBON object
+  - `src/tagion/` wrappers for tagion binaries
+- `srcipt/` utilitary scripts for testing purposes
 
 ## Maintainers
 
-- [@vladpazych](https://github.com/vladpazych)
+- [@Ivan Bilan](https://github.com/iwantegren)
 
 ## Support
 
-
-
-If you have any problems with this util, please, [open an issue](https://github.com/tagion/alpha_three/issues/new).
+If you have any problems with this module, please, [open an issue](https://github.com/tagion/npm-hibonutil/issues/new).
