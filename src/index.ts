@@ -19,11 +19,11 @@ console.log(hibon.get("boolean", HiBONType.BOOLEAN));
 console.log(hibon.get("sub_hibon", HiBONType.HIBON));
 
 console.log("----------------------------------------");
-const hibon_binary = hibonutil.toHiBON(hibon.toJSONBuffer());
+const hibon_binary = hibonutil.fromBuffer(hibon.toJSONBuffer());
 console.log(hibon_binary?.toString());
 console.log("----------------------------------------");
 
 if (hibon_binary) {
-  const json_string = hibonutil.toJSON(hibon_binary);
+  const json_string = hibonutil.fromBuffer(hibon_binary);
   console.log(json_string?.toString());
 }

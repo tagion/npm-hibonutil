@@ -11,11 +11,7 @@ export class hibonutil {
     return runBinary(this.name, ["--sample"]);
   }
 
-  static toJSON(hibon: Buffer, pretty: boolean = true): Buffer | null {
-    return runBinaryWithBuffer(this.name, [pretty ? "-pc" : "-c"], hibon);
-  }
-
-  static toHiBON(json: Buffer): Buffer | null {
-    return runBinaryWithBuffer(this.name, ["-c"], json);
+  static fromBuffer(buffer: Buffer, pretty: boolean = true): Buffer | null {
+    return runBinaryWithBuffer(this.name, [pretty ? "-pc" : "-c"], buffer);
   }
 }

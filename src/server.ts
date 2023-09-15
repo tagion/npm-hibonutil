@@ -1,13 +1,9 @@
 import express, { Application } from "express";
-import { JSONCollector } from "./JSONCollector";
 
 export class Server {
   private app: Application;
 
-  constructor(
-    public collector: JSONCollector,
-    public readonly port: number = 3000
-  ) {
+  constructor(public readonly port: number = 3000) {
     this.app = express();
 
     this.setup();
@@ -30,17 +26,10 @@ export class Server {
       } else {
         res.status(400);
         res.send("Wrong parameters");
-        this.collector.cleanup();
         process.exit(0);
       }
 
-      if (type === "null") {
-        // call hibonutil with JSON
-        // this.collector.cleanup();
-        process.exit(0); // Exit the server after receiving null-type
-      }
-
-      this.collector.updateJSON(key, type, value);
+      // TBD: handle request
     });
   }
 
