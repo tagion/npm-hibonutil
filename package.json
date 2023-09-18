@@ -3,6 +3,7 @@
   "version": "0.1.1",
   "description": "This is a NPM module for working with HiBON format",
   "main": "./build/index.js",
+  "types": "./build/types/index.d.ts",
   "type": "module",
   "scripts": {
     "test": "bash script/test_append_json.sh",
@@ -39,8 +40,6 @@
     "prettier": "3.0.3",
     "ts-node": "^10.9.1",
     "typescript": "^5.2.2"
-  },
-  "dependencies": {
   },
   "repository": {
     "type": "git",
