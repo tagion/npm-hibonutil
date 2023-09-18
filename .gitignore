@@ -130,5 +130,4 @@ dist
 .pnp.*
 
 tmp/
-src/**/*.js
-*.hibon
+build/

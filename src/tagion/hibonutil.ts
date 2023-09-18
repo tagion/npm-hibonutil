@@ -1,4 +1,4 @@
-import { ExecutionResult, runBinary, runBinaryWithBuffer } from "./../utils";
+import { ExecutionResult, runBinary, runBinaryWithBuffer } from "./utils.js";
 
 export class hibonutil {
   readonly name: string = "hibonutil";
