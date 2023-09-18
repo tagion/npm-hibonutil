@@ -1,6 +1,6 @@
 {
   "name": "hibonutil-wrapper",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "This is a NPM module for working with HiBON format",
   "main": "./build/index.js",
   "types": "./build/types/index.d.ts",
