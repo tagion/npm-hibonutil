@@ -1,6 +1,6 @@
 {
-  "name": "hibonuitl-wrapper",
-  "version": "0.1.0",
+  "name": "hibonutil-wrapper",
+  "version": "0.1.1",
   "description": "This is a NPM module for working with HiBON format",
   "main": "./build/index.js",
   "type": "module",
@@ -8,7 +8,7 @@
     "test": "bash script/test_append_json.sh",
     "lint": "eslint src/ --ext .ts",
     "lint-deps": "depcheck --skip-missing --ignore-bin-package",
-    "dev-build": "tsc && node --experimental-modules build/index.js",
+    "dev-build": "tsc && node build/index.js",
     "build": "npm run lint && npm run dev-build"
   },
   "exports": {
