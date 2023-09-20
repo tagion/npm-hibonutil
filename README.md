@@ -16,11 +16,26 @@ You can check this with commmand
 ```
 hibonutil --version
 ```
-
-To get started you can run following command from root directory
+---
+To get started and prove you have everything installed you can run following command from root directory
 ```
 npm run build
 ```
+---
+To start server with API for given SDK you can run following command from root directory
+```
+npm run start
+```
+In order to start the server on the specified port you can run
+```
+npm run start -- -p 3333
+``` 
+---
+To run short test for server and SDK you can run following command from root directory
+```
+npm run test
+```
+
 
 ## Scructure
 

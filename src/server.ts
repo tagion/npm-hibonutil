@@ -6,7 +6,10 @@ import { writeFileSync } from "fs";
 export class Server {
   private app: Application;
 
-  constructor(public readonly port: number = 3000) {
+  constructor(
+    public readonly port: number = 3000,
+    public readonly trusted_mode = false
+  ) {
     this.app = express();
   }
 
@@ -41,19 +44,23 @@ export class Server {
       }
     });
 
-    this.app.post("/stop", (_, res) => {
-      res.status(200);
-      res.send("Stop");
+    // Enable shutting down server with requestonly in trusted mode
+    if (this.trusted_mode) {
+      this.app.post("/stop", (_, res) => {
+        res.status(200);
+        res.send("Stop");
 
-      console.log("Stopping server...");
+        console.log("Stopping server...");
 
-      process.exit(0);
-    });
+        process.exit(0);
+      });
+    }
   }
 
   public start() {
     this.app.listen(this.port, () => {
       console.log(`Server listening on port ${this.port}`);
+      if (this.trusted_mode) console.log(`Server started in trusted mode`);
     });
   }
 }
