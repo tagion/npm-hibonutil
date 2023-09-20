@@ -2,7 +2,7 @@
 
 source $(dirname $0)/utils.sh
 
-nohup npm run build &
+nohup npm run start &
 
 WAIT_FOR_SERVER 5
 server_ready=$?
@@ -11,7 +11,7 @@ if [ $server_ready -eq 0 ]; then
     echo ----------------------------
     response=$(POST_JSON)
     hibon_data=$(echo "$response" | jq -r .hibon)
-    echo "$hibon_data" > out.hibon
+    echo "$hibon_data" > tmp/script_out.hibon
 
     STOP_SERVER
     echo ----------------------------

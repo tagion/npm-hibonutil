@@ -29,7 +29,7 @@ export class Server {
       const buffer = hibonutil.fromBuffer(hibon.toJSONBuffer());
 
       if (buffer) {
-        writeFileSync("out2.hibon", buffer.toString("binary"));
+        writeFileSync("tmp/script_out2.hibon", buffer.toString("binary"));
         console.log("Decoded JSON:");
         console.log(hibonutil.fromBuffer(buffer)?.toString("utf8"));
 
