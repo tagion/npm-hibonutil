@@ -31,9 +31,11 @@ export interface HiBONJSON {
 export class HiBON {
   private data: HiBONJSON = {};
 
-  constructor(buffer?: Buffer) {
-    if (buffer) {
-      this.data = JSON.parse(buffer.toString("utf8"));
+  constructor(json?: Buffer | string | object) {
+    if (typeof json === "string") {
+      this.data = JSON.parse(json);
+    } else if (json) {
+      this.data = JSON.parse(json.toString("utf8"));
     }
   }
 

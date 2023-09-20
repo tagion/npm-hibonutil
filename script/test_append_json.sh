@@ -9,12 +9,11 @@ server_ready=$?
 
 if [ $server_ready -eq 0 ]; then
     echo ----------------------------
-    POST_RECORD 0 f32 "0x1.3ae148p+0"
-    POST_RECORD 1 f64 "0x1.9b5d96fe285c6p+664"
-    POST_RECORD 2 bool true
-    POST_RECORD 3 i32 -42
+    response=$(POST_JSON)
+    hibon_data=$(echo "$response" | jq -r .hibon)
+    echo "$hibon_data" > out.hibon
 
-    POST_RECORD null null null
+    STOP_SERVER
     echo ----------------------------
 
     WAIT_FOR_SERVER 1

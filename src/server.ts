@@ -1,35 +1,53 @@
-import express, { Application } from "express";
+import express, { Application, Request, Response, NextFunction } from "express";
+import { HiBON } from "./hibon/HiBON.js";
+import { hibonutil } from "./tagion/hibonutil.js";
+import { writeFileSync } from "fs";
 
 export class Server {
   private app: Application;
 
   constructor(public readonly port: number = 3000) {
     this.app = express();
-
-    this.setup();
   }
 
-  private setup() {
+  public defaultSettings() {
     this.app.use(express.json());
-    this.app.use(express.urlencoded({ extended: true }));
 
-    this.app.post("/hibonutil", (req, res) => {
-      const key = req.body.key;
-      const type = req.body.type;
-      const value = req.body.value;
-
-      const success: boolean = key && type && value;
-
-      if (success) {
-        res.status(200);
-        res.send("OK");
-      } else {
-        res.status(400);
-        res.send("Wrong parameters");
-        process.exit(0);
+    // Validate JSON and handle possible errors
+    this.app.use(
+      (err: Error, req: Request, res: Response, next: NextFunction) => {
+        if ((err instanceof SyntaxError && "body" in err) || !req.is("json")) {
+          console.error(`${err.name}: ${err.message}`);
+          return res.sendStatus(400); // Bad request
+        }
+        next();
       }
+    );
 
-      // TBD: handle request
+    this.app.post("/hibonutil/convert", (req, res) => {
+      const hibon = new HiBON(JSON.stringify(req.body));
+      const buffer = hibonutil.fromBuffer(hibon.toJSONBuffer());
+
+      if (buffer) {
+        writeFileSync("out2.hibon", buffer.toString("binary"));
+        console.log("Decoded JSON:");
+        console.log(hibonutil.fromBuffer(buffer)?.toString("utf8"));
+
+        res.status(200);
+        res.json({ hibon: buffer.toString("binary") });
+      } else {
+        res.status(500);
+        res.send("Error in handling request");
+      }
+    });
+
+    this.app.post("/stop", (_, res) => {
+      res.status(200);
+      res.send("Stop");
+
+      console.log("Stopping server...");
+
+      process.exit(0);
     });
   }
 

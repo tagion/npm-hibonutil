@@ -1,2 +1,6 @@
-export { HiBON, HiBONType } from "./hibon/HiBON.js";
-export { hibonutil } from "./tagion/hibonutil.js";
+import { Server } from "./server.js";
+
+const server: Server = new Server();
+
+server.defaultSettings();
+server.start();
