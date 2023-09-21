@@ -9,6 +9,21 @@ This project is planned as NPM module wrapper for HiBON using `hibonutil`
 >
 > Cross-platform not supported for now, since module uses linux-only binary
 
+## Install
+
+Firstly you need to clone this repository.
+> Make sure that you have needed access rights and SSH key.
+```
+git clone git@github.com:tagion/npm-hibonutil.git
+cd npm-hibonutil
+```
+Install needed depencencies and run build:
+```
+npm install
+npm run build
+```
+If install and build passed without errors - everything is ready for use
+
 ## Gettings Started
 
 To use this module `hibonutil` need to be installed.
