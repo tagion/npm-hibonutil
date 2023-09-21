@@ -1,7 +1,6 @@
 import express, { Application, Request, Response, NextFunction } from "express";
 import { HiBON } from "./hibon/HiBON.js";
 import { hibonutil } from "./tagion/hibonutil.js";
-import { writeFileSync } from "fs";
 
 export class Server {
   private app: Application;
@@ -27,24 +26,24 @@ export class Server {
       }
     );
 
+    // /hibonutil/convert POST json
     this.app.post("/hibonutil/convert", (req, res) => {
       const hibon = new HiBON(JSON.stringify(req.body));
       const buffer = hibonutil.fromBuffer(hibon.toJSONBuffer());
 
       if (buffer) {
-        writeFileSync("tmp/script_out2.hibon", buffer.toString("binary"));
-        console.log("Decoded JSON:");
-        console.log(hibonutil.fromBuffer(buffer)?.toString("utf8"));
-
+        // Send raw stream in response
+        res.setHeader("Content-Type", "application/octet-stream");
+        res.write(buffer);
         res.status(200);
-        res.json({ hibon: buffer.toString("binary") });
+        res.end();
       } else {
         res.status(500);
-        res.send("Error in handling request");
+        res.send("Internal error in handling request");
       }
     });
 
-    // Enable shutting down server with requestonly in trusted mode
+    // Enable shutting down server with request only in trusted mode
     if (this.trusted_mode) {
       this.app.post("/stop", (_, res) => {
         res.status(200);

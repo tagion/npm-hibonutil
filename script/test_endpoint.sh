@@ -8,27 +8,39 @@ WAIT_FOR_SERVER 5
 server_ready=$?
 
 if [ $server_ready -eq 0 ]; then
-    echo ----------------------------
+    echo -------------------- START TEST --------------------
     response=$(POST_JSON)
-    hibon_data=$(echo "$response" | jq -r .hibon)
-    echo "$hibon_data" > tmp/script_out.hibon
+    hibon_file="tmp/script_out.hibon"
 
+    echo "$response" > $hibon_file
+    echo "Received hibon data saved in '$hibon_file'"
+
+    decoded_response=$(hibonutil -cp < <(echo -n "$response"))
+
+    if [ "$JSON_STRING" = "$decoded_response" ]; then
+        echo -e "\e[32mSUCCESS:\e[0m HiBON JSON decoded successfully"
+    else
+        echo -e "\e[31mFAIL:\e[0m Fail to decode HiBON JSON!"
+    fi
+
+    echo Shutting down server...
     STOP_SERVER
-    echo ----------------------------
+    echo -------------------- END TEST --------------------
 
+    echo Check that server is offline
     WAIT_FOR_SERVER 1
+    echo -e "\e[32mSUCCESS:\e[0m Server is offline"
 
 else
-    echo "Test failure. Exit"
+    echo -e "\e[31mFAIL:\e[0m Server is unavailable!"
 fi
 
-CHECK_PORT
-port_busy=$?
-echo Port busy: $port_busy
+if CHECK_PORT; then
+    echo -e "\e[32mSUCCESS:\e[0m Port is available"
+else
+    echo -e "\e[31mFAIL:\e[0m Port is still busy!"
+fi
 
-echo End test
-
-echo ----------------------------
-echo Output of server:
+echo -------------------- SERVER OUTPUT --------------------
 cat nohup.out 
 rm nohup.out
