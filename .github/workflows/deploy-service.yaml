@@ -1,0 +1,33 @@
+name: Main Flow
+on:
+  workflow_dispatch:
+  push: 
+    branches: 
+      - master
+env:
+  TARGET: x86_64-linux
+  STAGE: commit
+  DC: dmd
+  CD_PARALLEL: 2
+  RETENTION_DAYS_BINS: 3
+  CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+  UNITTEST_COV: unittest-cov
+  GITBOT_TOKEN: ${{ secrets.GITBOT_TOKEN }}
+permissions:
+  contents: read
+  pages: write
+  id-token: write 
+
+jobs:
+  deploy:
+    runs-on: hibon-ec2
+    steps:    
+      - name: get artifact and restart service
+        run: |
+          id
+          pwd
+          ll
+          npm install 
+          npm run build
+          npm run start
+  
