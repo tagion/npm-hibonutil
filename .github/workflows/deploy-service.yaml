@@ -21,8 +21,11 @@ permissions:
 jobs:
   deploy:
     runs-on: hibon-ec2
-    steps:    
-      - name: get artifact and restart service
+    steps: 
+      - name: Checkout
+        uses: actions/checkout@v4.1.0
+        
+      - name: build and run service
         run: |
           id
           pwd
