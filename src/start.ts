@@ -1,4 +1,4 @@
-import { Server } from "./server.js";
+import { Server } from "./server/server.js";
 import yargs from "yargs";
 
 const argv = yargs(process.argv.slice(2))
