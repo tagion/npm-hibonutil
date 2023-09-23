@@ -30,7 +30,9 @@ jobs:
           id
           pwd
           ls -l
-          npm install 
+          npm install
+          npm install eslint
           npm run build
-          npm run start
+          pkill node
+          pm2 start 0
   
