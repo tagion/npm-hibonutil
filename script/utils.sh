@@ -1,10 +1,7 @@
 #!/bin/bash
 
-ADDRESS="localhost"
 PORT=3000
-ENDPOINT="hibonutil"
-
-SERVER_ADDRESS="http://${ADDRESS}:${PORT}"
+SERVER_ADDRESS="http://localhost:$PORT"
 
 SAMPLE_JSON="script/sample.json"
 JSON_STRING=$(<"$SAMPLE_JSON")
@@ -18,7 +15,7 @@ POST_RECORD ()
 
 POST_JSON ()
 {
-    response=$(curl -s -X POST $SERVER_ADDRESS/$ENDPOINT/convert -H "Content-Type: application/json" -d "$JSON_STRING")
+    response=$(curl -s -X POST $SERVER_ADDRESS/hibonutil/convert -H "Content-Type: application/json" -d "$JSON_STRING")
 
     echo "$response"
 }

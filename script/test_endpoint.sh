@@ -2,7 +2,7 @@
 
 source $(dirname $0)/utils.sh
 
-nohup npm run start &
+nohup npm run start -- --trusted -p $PORT &
 
 WAIT_FOR_SERVER 5
 server_ready=$?

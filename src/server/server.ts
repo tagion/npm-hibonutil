@@ -71,6 +71,22 @@ export class Server {
       }
     });
 
+    this.app.post("/hibonutil/validate", (req, res) => {
+      const hibon = new HiBON(JSON.stringify(req.body));
+      const buffer = hibonutil.fromBuffer(hibon.toJSONBuffer());
+
+      if (buffer) {
+        // Send raw stream in response
+        res.send(
+          "We have no updated hibonutil yet, but HiBON you've sent valid, trust me"
+        );
+        res.status(200);
+      } else {
+        res.send("I'm sorry, but your HiBON is malformed");
+        res.status(400);
+      }
+    });
+
     // Enable shutting down server with request only in trusted mode
     if (this.trusted_mode) {
       this.app.use("/stop", (_, res) => {
@@ -101,10 +117,6 @@ export class Server {
             name: "hibonutil",
             description: "Operations related to hibonutil tool",
           },
-          {
-            name: "system",
-            description: "System operations",
-          },
         ],
         schemes: ["http"],
       },
@@ -113,7 +125,7 @@ export class Server {
 
     const specs = swaggerJsdoc(options);
 
-    this.app.use("/docs", swaggerUi.serve, swaggerUi.setup(specs));
+    this.app.use("/", swaggerUi.serve, swaggerUi.setup(specs));
   }
 
   public start() {
