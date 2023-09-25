@@ -1,0 +1,19 @@
+components:
+  examples:
+    sampleHiBON:
+      value: "77+9ARoGQklHSU5U77+977+977+977+977+977+977+977+977+985C1h1kIB0JPT0xFQU4BFwdGTE9BVDMy77+9cO+/vT8YB0ZMT0FUNjTGhe+/vW/ZtXlpEQVJTlQzMlYSBUlOVDY077+977+977+977+977+9fRQGVUlOVDMyKhUGVUlOVDY077+977+977+977+977+9zZgCAglzdWJfaGlib24pAwZCSU5BUlkEAQIDBAEGU1RSSU5HBFRleHQJBFRJTUXvv73vv73vv73oiLjvv73vv70ICg=="
+    sampleJson:
+      value:
+        FLOAT64:
+          - "f64"
+          - "0x1.9b5d96fe285c6p+664"
+        sub_hibon:
+          BINARY:
+            - "*"
+            - "@AQIDBA=="
+          STRING: "Text"
+          TIME:
+            - "time"
+            - "2023-09-20T13:01:25.5186591"
+    sampleVerifyText: 
+      value: "TBD: some data about HiBON verification..."
