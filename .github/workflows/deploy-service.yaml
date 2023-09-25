@@ -5,13 +5,6 @@ on:
     branches: 
       - master
 env:
-  TARGET: x86_64-linux
-  STAGE: commit
-  DC: dmd
-  CD_PARALLEL: 2
-  RETENTION_DAYS_BINS: 3
-  CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-  UNITTEST_COV: unittest-cov
   GITBOT_TOKEN: ${{ secrets.GITBOT_TOKEN }}
 permissions:
   contents: read
@@ -28,7 +21,8 @@ jobs:
       - name: build and run service
         run: |
           npm install
-          npm install eslint
+          npm install eslint pm2
           npm run build
-          pm2 restart 0
+          pm2 restart hibon
+          sudo service nginx restart
   
