@@ -71,18 +71,6 @@ export class Server {
       }
     });
 
-    /**
-     * @swagger
-     * /stop:
-     *   get:
-     *     summary: Shutdown the server
-     *     tags:
-     *       - system
-     *     description: Shuts down the server when requested, available only in trusted mode.
-     *     responses:
-     *       '200':
-     *         description: Server shutdown initiated successfully.
-     */
     // Enable shutting down server with request only in trusted mode
     if (this.trusted_mode) {
       this.app.use("/stop", (_, res) => {
