@@ -15,7 +15,7 @@ POST_RECORD ()
 
 POST_JSON ()
 {
-    response=$(curl -s -X POST $SERVER_ADDRESS/hibonutil/convert -H "Content-Type: application/json" -d "$JSON_STRING")
+    response=$(curl -s -X POST $SERVER_ADDRESS$1 -H "Content-Type: application/json" -d "$JSON_STRING")
 
     echo "$response"
 }

@@ -71,14 +71,39 @@ export class Server {
       }
     });
 
+    /**
+     * @swagger
+     * /hibonutil/validate:
+     *   post:
+     *     summary: Validate HiBON JSON with hibonutil
+     *     tags:
+     *       - hibonutil
+     *     produces:
+     *       - text/plain
+     *     requestBody:
+     *       description: JSON to verify
+     *       required: true
+     *       content:
+     *         application/json:
+     *           schema:
+     *             type: object
+     *     responses:
+     *       200:
+     *         description: Success
+     *         content:
+     *           text/plain:
+     *             schema:
+     *               type: string
+     */
     this.app.post("/hibonutil/validate", (req, res) => {
       const hibon = new HiBON(JSON.stringify(req.body));
       const buffer = hibonutil.fromBuffer(hibon.toJSONBuffer());
 
       if (buffer) {
-        // Send raw stream in response
+        res.type("text/plain");
         res.send(
-          "We have no updated hibonutil yet, but HiBON you've sent valid, trust me"
+          "We have no updated hibonutil yet, but HiBON you've sent valid, trust me\nHere's your buffer:\n" +
+            buffer.toString("utf8")
         );
         res.status(200);
       } else {

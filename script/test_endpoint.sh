@@ -9,7 +9,12 @@ server_ready=$?
 
 if [ $server_ready -eq 0 ]; then
     echo -------------------- START TEST --------------------
-    response=$(POST_JSON)
+    response=$(POST_JSON "/hibonutil/validate")
+    echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+    echo "$response"
+    echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+
+    response=$(POST_JSON "/hibonutil/convert")
     hibon_file="tmp/script_out.hibon"
 
     echo "$response" > $hibon_file
