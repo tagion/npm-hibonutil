@@ -1,0 +1,33 @@
+name: Main Flow
+on:
+  workflow_dispatch:
+  push: 
+    branches: 
+      - master
+env:
+  GITBOT_TOKEN: ${{ secrets.GITBOT_TOKEN }}
+permissions:
+  contents: read
+  pages: write
+  id-token: write 
+
+jobs:
+  deploy:
+    runs-on: hibon-ec2
+    steps: 
+      - name: Checkout
+        uses: actions/checkout@v4.1.0
+        
+      - name: build and run service
+        run: |
+          export GH_TOKEN=${{ env.GITBOT_TOKEN }}
+          mkdir -p artifact || echo "artifact dir already exists"
+          cd artifact && gh run download -n successful_artifact --repo tagion/tagion
+          tar -xzf *.tar.gz
+          cd ..
+          npm install
+          npm install eslint pm2
+          npm run build
+          pm2 restart hibon
+          sudo service nginx restart
+  
