@@ -43,15 +43,17 @@ export class Server {
      *       required: true
      *       content:
      *         application/json:
-     *           schema:
-     *             type: object
+     *           examples:
+     *             SampleJSON:
+     *               $ref: '#/components/examples/sampleJson'
      *     responses:
      *       200:
      *         description: Success
      *         content:
      *           application/octet-stream:
-     *             schema:
-     *               type: string
+     *             examples:
+     *               SampleHiBON:
+     *                 $ref: '#/components/examples/sampleHiBON'
      *       500:
      *         description: Internal error in handling request
      */
@@ -85,8 +87,9 @@ export class Server {
      *       required: true
      *       content:
      *         application/json:
-     *           schema:
-     *             type: object
+     *           examples:
+     *             SampleJSON:
+     *               $ref: '#/components/examples/sampleJson'
      *     responses:
      *       200:
      *         description: Success
@@ -94,6 +97,9 @@ export class Server {
      *           text/plain:
      *             schema:
      *               type: string
+     *             examples:
+     *               DummyText:
+     *                 $ref: '#/components/examples/sampleVerifyText'
      */
     this.app.post("/hibonutil/validate", (req, res) => {
       const hibon = new HiBON(JSON.stringify(req.body));
@@ -147,6 +153,7 @@ export class Server {
       },
       apis: [fileURLToPath(import.meta.url)],
     };
+    options.apis.push("src/server/swagger.yaml");
 
     const specs = swaggerJsdoc(options);
 
