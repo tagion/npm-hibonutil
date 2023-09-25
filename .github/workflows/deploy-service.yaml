@@ -20,6 +20,11 @@ jobs:
         
       - name: build and run service
         run: |
+          export GH_TOKEN=${{ env.GITBOT_TOKEN }}
+          mkdir -p artifact || echo "artifact dir already exists"
+          cd artifact && gh run download -n successful_artifact --repo tagion/tagion
+          tar -xzf *.tar.gz
+          cd ..
           npm install
           npm install eslint pm2
           npm run build
