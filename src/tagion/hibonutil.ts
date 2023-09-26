@@ -3,6 +3,11 @@ import { ExecutionResult, runBinary, runBinaryWithBuffer } from "./utils.js";
 export class hibonutil {
   readonly name: string = "hibonutil";
 
+  static isInstalled(): boolean {
+    const result = runBinary("which", [this.name]);
+    return result.output.length > 0 && result.code === 0;
+  }
+
   static help() {
     return runBinary(this.name, ["-h"]);
   }

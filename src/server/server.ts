@@ -161,9 +161,16 @@ export class Server {
   }
 
   public start() {
-    this.app.listen(this.port, () => {
-      console.log(`Server listening on port ${this.port}`);
-      if (this.trusted_mode) console.log(`Server started in trusted mode`);
-    });
+    const installed = hibonutil.isInstalled();
+    console.log(`Checking ${hibonutil.name}...`, installed);
+
+    if (installed) {
+      this.app.listen(this.port, () => {
+        console.log(`Server listening on port ${this.port}`);
+        if (this.trusted_mode) console.log(`Server started in trusted mode`);
+      });
+    } else {
+      console.error(`Can't start server without ${hibonutil.name} installed!`);
+    }
   }
 }
