@@ -6,6 +6,8 @@ on:
       - master
 env:
   GITBOT_TOKEN: ${{ secrets.GITBOT_TOKEN }}
+  BIN_DIR: /home/gitbot/actions-runner/_work/npm-hibonutil/npm-hibonutil/artifact/build/x86_64-linux/bin
+  WORK_DIR: /home/gitbot/actions-runner/_work/npm-hibonutil/npm-hibonutil/
 permissions:
   contents: read
   pages: write
@@ -21,10 +23,17 @@ jobs:
       - name: build and run service
         run: |
           export GH_TOKEN=${{ env.GITBOT_TOKEN }}
+          rm -rf artifact
           mkdir -p artifact || echo "artifact dir already exists"
           cd artifact && gh run download -n successful_artifact --repo tagion/tagion
           tar -xzf *.tar.gz
+          rm -r *.tar.gz
           cd ..
+          source ~/.bashrc
+          cd ${{ env.BIN_DIR }}
+          ln -s tagion hibonutil
+          chmod +x hibonutil
+          cd ${{ env.WORK_DIR }}
           npm install
           npm install eslint pm2
           npm run build
