@@ -23,13 +23,13 @@ jobs:
       - name: build and run service
         run: |
           export GH_TOKEN=${{ env.GITBOT_TOKEN }}
-          rm ${{ env.BIN_DIR }}/tagion ${{ env.BIN_DIR }}/hibonutil || echo "files not exists"
+          rm -rf artifact
           mkdir -p artifact || echo "artifact dir already exists"
           cd artifact && gh run download -n successful_artifact --repo tagion/tagion
           tar -xzf *.tar.gz
           rm -r *.tar.gz
           cd ..
-          export PATH="$PATH:/home/gitbot/actions-runner/_work/npm-hibonutil/npm-hibonutil/artifact/build/x86_64-linux/bin"
+          source ~/.bashrc
           cd ${{ env.BIN_DIR }}
           ln -s tagion hibonutil
           chmod +x hibonutil
