@@ -9,9 +9,10 @@
     "test": "bash script/test_endpoint.sh",
     "lint": "eslint src/ --ext .ts",
     "lint-deps": "depcheck --skip-missing --ignore-bin-package",
-    "dev-build": "tsc && node build/index.js",
-    "build": "npm run lint && npm run dev-build",
-    "start": "npm run lint && tsc && node build/start.js"
+    "build": "tsc && node build/index.js",
+    "start": "tsc && node build/start.js",
+    "dev-build": "npm run lint && npm run build",
+    "dev-start": "npm run lint && npm run start"
   },
   "exports": {
     ".": "./build/index.js"

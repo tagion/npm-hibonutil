@@ -157,7 +157,7 @@ export class Server {
 
     const specs = swaggerJsdoc(options);
 
-    this.app.use("/", swaggerUi.serve, swaggerUi.setup(specs));
+    this.app.use("/docs", swaggerUi.serve, swaggerUi.setup(specs));
   }
 
   public start() {
