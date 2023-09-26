@@ -29,7 +29,7 @@ jobs:
           tar -xzf *.tar.gz
           rm -r *.tar.gz
           cd ..
-          export PATH="$PATH:${{ env.BIN_DIR }}"
+          export PATH="$PATH:/home/gitbot/actions-runner/_work/npm-hibonutil/npm-hibonutil/artifact/build/x86_64-linux/bin"
           cd ${{ env.BIN_DIR }}
           ln -s tagion hibonutil
           chmod +x hibonutil
