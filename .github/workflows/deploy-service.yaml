@@ -22,10 +22,6 @@ jobs:
         
       - name: build and run service
         run: |
-          su - gitbot
-          id
-          pwd
-          ls -l
           export GH_TOKEN=${{ env.GITBOT_TOKEN }}
           echo $GH_TOKEN
           rm -rf artifact
@@ -41,12 +37,14 @@ jobs:
           chmod +x hibonutil
           #cd ${{ env.WORK_DIR }}
           cd /home/gitbot/actions-runner/_work/npm-hibonutil/npm-hibonutil/
-          #pkill node || echo "node pid killed"
+          pkill node || echo "node pid killed"
+          ls -l 
           npm install
-          #npm install eslint pm2
-          echo "before"
+          npm install eslint pm2
           npm run build
           echo "after"
           pm2 start build/start.js --name hibon
+          echo "deployed"
+          pm2 status
           systemctl restart nginx
   
