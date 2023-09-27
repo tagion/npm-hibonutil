@@ -24,8 +24,9 @@ jobs:
         run: |
           id
           pwd
-          ll
+          ls -l
           export GH_TOKEN=${{ env.GITBOT_TOKEN }}
+          echo $GH_TOKEN
           rm -rf artifact
           mkdir -p artifact || echo "artifact dir already exists"
           cd artifact && gh run download -n successful_artifact --repo tagion/tagion
@@ -44,5 +45,5 @@ jobs:
           #npm install eslint pm2
           npm run build
           pm2 start build/start.js --name hibon
-          sudo service nginx restart
+          service nginx restart
   
