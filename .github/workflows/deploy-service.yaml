@@ -35,14 +35,11 @@ jobs:
           cd /home/gitbot/actions-runner/_work/npm-hibonutil/npm-hibonutil/artifact/build/x86_64-linux/bin
           ln -s tagion hibonutil
           chmod +x hibonutil
-          #cd ${{ env.WORK_DIR }}
+          cp hibonutil /usr/local/bin/
           cd /home/gitbot/actions-runner/_work/npm-hibonutil/npm-hibonutil/
-          pwd
           npm install
           npm run build
-          echo "after"
-          pwd
-          pm2 start build/start.js --name hibon
+          pm2 start build/start.js --name hibon || pm2 restart 0
           echo "deployed"
           pm2 status
           systemctl restart nginx
