@@ -142,7 +142,10 @@ export class Server {
           version: "1.0.0",
           description: "Specification for testing API of HiBON SDK",
         },
-        servers: [{ url: `http://localhost:${this.port}` }],
+        servers: [
+          { url: "https://hibon.tagion.org" },
+          { url: `http://localhost:${this.port}` },
+        ],
         tags: [
           {
             name: "hibonutil",
