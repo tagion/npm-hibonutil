@@ -37,7 +37,6 @@ jobs:
           chmod +x hibonutil
           #cd ${{ env.WORK_DIR }}
           cd /home/gitbot/actions-runner/_work/npm-hibonutil/npm-hibonutil/
-          pkill node || echo "node pid killed"
           pwd
           npm install
           npm run build
