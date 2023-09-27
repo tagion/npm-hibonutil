@@ -39,8 +39,7 @@ jobs:
           cd /home/gitbot/actions-runner/_work/npm-hibonutil/npm-hibonutil/
           npm install
           npm run build
-          pm2 start build/start.js --name hibon || pm2 restart 0
-          echo "deployed"
-          pm2 status
+          #pm2 start build/start.js --name hibon || pm2 restart 0
+          nohup npm run start -- --trusted
           systemctl restart nginx
   
