@@ -41,10 +41,12 @@ jobs:
           chmod +x hibonutil
           #cd ${{ env.WORK_DIR }}
           cd /home/gitbot/actions-runner/_work/npm-hibonutil/npm-hibonutil/
-          pkill node || echo "node pid killed"
+          #pkill node || echo "node pid killed"
           npm install
           #npm install eslint pm2
+          echo "before"
           npm run build
+          echo "after"
           pm2 start build/start.js --name hibon
-          service nginx restart
+          systemctl restart nginx
   
