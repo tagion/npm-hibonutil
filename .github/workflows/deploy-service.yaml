@@ -40,6 +40,6 @@ jobs:
           npm install
           #npm install eslint pm2
           npm run build
-          #nohup npm run start -- --trusted
+          pm2 start build/start.js --name hibon
           sudo service nginx restart
   
