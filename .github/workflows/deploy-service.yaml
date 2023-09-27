@@ -38,6 +38,6 @@ jobs:
           npm install
           npm install eslint pm2
           npm run build
-          nohup npm run start -- --trusted
+          #nohup npm run start -- --trusted
           sudo service nginx restart
   
