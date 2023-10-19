@@ -39,7 +39,10 @@ export class Server {
      *     produces:
      *       - application/octet-stream
      *     requestBody:
-     *       description: JSON data to convert
+     *       description: |
+     *         JSON data to convert.
+     *
+     *         *The body size should be less than 100kb*
      *       required: true
      *       content:
      *         application/json:
@@ -54,6 +57,8 @@ export class Server {
      *             examples:
      *               SampleHiBON:
      *                 $ref: '#/components/examples/sampleHiBON'
+     *       413:
+     *         description: Payload Too Large. The request entity exceeds server's limitations. Default size limit is 100kb
      *       500:
      *         description: Internal error in handling request
      */
@@ -83,7 +88,10 @@ export class Server {
      *     produces:
      *       - text/plain
      *     requestBody:
-     *       description: JSON to verify
+     *       description: |
+     *         JSON data to verify.
+     *
+     *         *The body size should be less than 100kb*
      *       required: true
      *       content:
      *         application/json:
@@ -100,6 +108,8 @@ export class Server {
      *             examples:
      *               DummyText:
      *                 $ref: '#/components/examples/sampleVerifyText'
+     *       413:
+     *         description: Payload Too Large. The request entity exceeds server's limitations. Default size limit is 100kb
      */
     this.app.post("/hibonutil/validate", (req, res) => {
       const hibon = new HiBON(JSON.stringify(req.body));
