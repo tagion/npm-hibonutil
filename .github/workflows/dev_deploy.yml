@@ -35,7 +35,6 @@ jobs:
           ECR_REPOSITORY: hibon-service
           IMAGE_TAG: ${{ github.sha }}
         run: |
-          npm install
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:latest .
           docker push -a $ECR_REGISTRY/$ECR_REPOSITORY
 
