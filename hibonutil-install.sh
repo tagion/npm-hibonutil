@@ -14,11 +14,12 @@ apt update && apt install -y gh;
 # Download and install hibonutil
 echo $1 | gh auth login --with-token
 
-mkdir -p /usr/src/app/artifact
-cd /usr/src/app/artifact
+mkdir -p artifact
+cd artifact
 gh run download -n successful_artifact --repo tagion/tagion
-
-tar -xzf *.tar.gz -C /usr/local/bin
+tar -xzf *.tar.gz
 rm -r *.tar.gz
-cd /usr/local/bin/
-tagion -f
+cd build/x86_64-linux/bin
+ln -s tagion hibonutil
+chmod +x hibonutil
+cp hibonutil /usr/local/bin/
