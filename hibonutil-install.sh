@@ -12,7 +12,7 @@ echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githu
 apt update && apt install -y gh;
 
 # Download and install hibonutil
-echo $GITHUB_TOKEN | gh auth login --with-token
+echo $GITBOT_TOKEN | gh auth login --with-token
 
 mkdir -p /usr/src/app/artifact
 cd /usr/src/app/artifact
