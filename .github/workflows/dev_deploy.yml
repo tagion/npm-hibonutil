@@ -35,7 +35,7 @@ jobs:
           ECR_REPOSITORY: hibon-service
           IMAGE_TAG: ${{ github.sha }}
         run: |
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:latest .
+          docker build --build-arg GITHUB_TOKEN=${{ secrets.GITBOT_TOKEN }} -t $ECR_REGISTRY/$ECR_REPOSITORY:latest .
           docker push -a $ECR_REGISTRY/$ECR_REPOSITORY
 
       - name: Update kube config

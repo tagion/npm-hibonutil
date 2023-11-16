@@ -1,5 +1,7 @@
 FROM node:16
 
+ARG GITBOT_TOKEN
+
 WORKDIR /usr/src/app
 
 COPY . .
@@ -10,6 +12,6 @@ EXPOSE 3000
 
 ENV NODE_ENV=production
 
-RUN bash hibonutil-install.sh
+RUN bash hibonutil-install.sh ${GITBOT_TOKEN}
 
 CMD ["npm", "run", "start"]
