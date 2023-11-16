@@ -18,6 +18,12 @@ spec:
         image: 763081292656.dkr.ecr.eu-central-1.amazonaws.com/hibon-service
         ports:
         - containerPort: 3000
+        env:
+        - name: GITBOT_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: gitbot-token-secret
+              key: token
 
 ---
 apiVersion: v1
