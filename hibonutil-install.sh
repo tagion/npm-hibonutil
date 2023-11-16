@@ -20,5 +20,5 @@ gh run download -n successful_artifact --repo tagion/tagion
 
 tar -xzf *.tar.gz -C /usr/local/bin
 rm -r *.tar.gz
-ln -s /usr/local/bin/tagion /usr/local/bin/hibonutil
-chmod +x /usr/local/bin/hibonutil
+cd /usr/local/bin/
+tagion -f
