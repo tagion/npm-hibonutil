@@ -1,13 +1,13 @@
-name: Deploy develop
+name: Deploy prod
 on:
   push:
     branches:
-      - develop
+      - master
   workflow_dispatch:
 
 env:
   APP_NAME: hibon-service
-  PROJECT_NAME: dev-hibon-service
+  PROJECT_NAME: prod-hibon-service
 
 jobs:
   deploy:
@@ -45,4 +45,4 @@ jobs:
       - name: Deploy to EKS
         run: |
           kubectl delete deploy $PROJECT_NAME || echo "old deploy deleted"
-          kubectl apply -f k8s/dev_deployment.yml
+          kubectl apply -f k8s/prod_deployment.yml
