@@ -64,7 +64,7 @@ export class Server {
      */
     this.app.post("/hibonutil/convert", (req, res) => {
       const hibon = new HiBON(JSON.stringify(req.body));
-      const buffer = hibonutil.fromBuffer(hibon.toJSONBuffer());
+      const buffer = hibonutil.fromJSON(hibon.toJSONBuffer());
 
       if (buffer) {
         // Send raw stream in response
@@ -113,7 +113,7 @@ export class Server {
      */
     this.app.post("/hibonutil/validate", (req, res) => {
       const hibon = new HiBON(JSON.stringify(req.body));
-      const buffer = hibonutil.fromBuffer(hibon.toJSONBuffer());
+      const buffer = hibonutil.fromJSON(hibon.toJSONBuffer());
 
       if (buffer) {
         res.type("text/plain");

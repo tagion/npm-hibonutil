@@ -24,18 +24,20 @@ export function runBinary(binary: string, args: string[]): ExecutionResult {
 
 export function runBinaryWithBuffer(
   command: string,
-  args: string[],
-  buffer: Buffer
+  args: string[]
 ): Buffer | null {
   try {
     const result = spawnSync(command, args, {
-      input: buffer,
       encoding: "buffer",
     });
 
     if (result.error) {
       console.error(`Error: ${result.error.message}`);
       return null;
+    }
+
+    if (result.stderr.length > 0) {
+      console.log(`Error: ${result.stderr.toString("binary")}`);
     }
 
     const output = result.stdout.toString("binary");
