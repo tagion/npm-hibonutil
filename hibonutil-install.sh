@@ -16,7 +16,12 @@ echo $1 | gh auth login --with-token
 
 mkdir -p artifact
 cd artifact
-gh run download -n successful_artifact --repo tagion/tagion
+
+gh release download v1.0.0 --repo tagion/tagion --pattern "successful_artifact.zip"
+
+unzip successful_artifact.zip
+rm -r successful_artifact.zip
+
 tar -xzf *.tar.gz
 rm -r *.tar.gz
 cd build/x86_64-linux/bin
