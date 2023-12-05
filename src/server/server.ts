@@ -154,6 +154,8 @@ export class Server {
         },
         servers: [
           { url: "https://hibon.tagion.org" },
+          { url: "https://test-hibon.tagion.org" },
+          { url: "https://dev-hibon.tagion.org" },
           { url: `http://localhost:${this.port}` },
         ],
         tags: [
