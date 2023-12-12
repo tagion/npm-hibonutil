@@ -80,6 +80,51 @@ export class Server {
 
     /**
      * @swagger
+     * /hibonutil/dartindex:
+     *   post:
+     *     summary: Calculate DART index of HiBONJSON
+     *     tags:
+     *       - hibonutil
+     *     produces:
+     *       - application/json
+     *     requestBody:
+     *       description: |
+     *         JSON data to calculate.
+     *
+     *         *The body size should be less than 100kb*
+     *       required: true
+     *       content:
+     *         application/json:
+     *           examples:
+     *             SampleJSON:
+     *               $ref: '#/components/examples/sampleJson'
+     *     responses:
+     *       200:
+     *         description: Success
+     *         content:
+     *           application/json:
+     *             examples:
+     *               SampleDARTIndex:
+     *                 $ref: '#/components/examples/sampleDARTIndex'
+     *       413:
+     *         description: Payload Too Large. The request entity exceeds server's limitations. Default size limit is 100kb
+     *       500:
+     *         description: Internal error in handling request
+     */
+    this.app.post("/hibonutil/dartindex", (req, res) => {
+      const hibon = new HiBON(JSON.stringify(req.body));
+      const dart_index = hibonutil.getDARTIndex(hibon);
+
+      if (dart_index) {
+        res.json({ dartindex: dart_index });
+      } else {
+        res.status(500);
+        res.send("Internal error in handling request");
+      }
+    });
+
+    /**
+     * @swagger
      * /hibonutil/validate:
      *   post:
      *     summary: Validate HiBON JSON with hibonutil

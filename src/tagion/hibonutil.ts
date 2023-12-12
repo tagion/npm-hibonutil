@@ -7,6 +7,7 @@ import {
 import os from "os";
 import path from "path";
 import fs from "fs";
+import { HiBON } from "../hibon/HiBON.js";
 
 export class hibonutil {
   readonly name: string = "hibonutil";
@@ -42,6 +43,55 @@ export class hibonutil {
       try {
         if (fs.existsSync(tempFilePath)) {
           fs.unlinkSync(tempFilePath);
+        }
+      } catch (cleanupError) {
+        console.error(`Error cleaning up temporary file: ${cleanupError}`);
+      }
+    }
+  }
+
+  static getDARTIndex(json: HiBON): string | null {
+    const tempDir = os.tmpdir();
+    const tempFilePrefix = path.join(tempDir, generateTempFilename(""));
+
+    const tempJson = tempFilePrefix + "json";
+    const tempHibon = tempFilePrefix + "hibon";
+
+    try {
+      fs.writeFileSync(tempJson, json.toJSONBuffer());
+
+      // Convert JSON to HiBON
+      let result = runBinary(this.name, [tempJson]);
+      if (result.code != 0) {
+        console.error(
+          `Error converting ${tempJson} file to HiBON: ${result.output}`
+        );
+
+        return null;
+      }
+
+      // Get DART index from HiBON
+      result = runBinary(this.name, [tempHibon, "-ctH"]);
+      if (result.code != 0) {
+        console.error(
+          `Error calculating DART index of ${tempHibon}: ${result.output}`
+        );
+
+        return null;
+      }
+
+      return result.output;
+    } catch (error) {
+      console.error(error);
+      return null;
+    } finally {
+      try {
+        if (fs.existsSync(tempJson)) {
+          fs.unlinkSync(tempJson);
+        }
+
+        if (fs.existsSync(tempHibon)) {
+          fs.unlinkSync(tempHibon);
         }
       } catch (cleanupError) {
         console.error(`Error cleaning up temporary file: ${cleanupError}`);

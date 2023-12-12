@@ -17,3 +17,6 @@ components:
             - "2023-09-20T13:01:25.5186591"
     sampleVerifyText: 
       value: "TBD: some data about HiBON verification..."
+    sampleDARTIndex:
+      value:
+        dartindex: "@4NFsU9l9xCcwbflc6wZiadg7hSz8LQmAzjnltp-i-Zs="
