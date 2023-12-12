@@ -12,7 +12,7 @@ export function runBinary(binary: string, args: string[]): ExecutionResult {
   try {
     const console_output = execSync(`${binary} ${args.join(" ")}`, {
       encoding: "utf-8",
-    });
+    }).trim();
     result = { code: 0, output: console_output };
   } catch (error: unknown) {
     if (error instanceof Error) result = { code: 1, output: error.message };
