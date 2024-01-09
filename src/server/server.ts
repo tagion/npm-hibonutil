@@ -4,9 +4,11 @@ import { hibonutil } from "../tagion/hibonutil.js";
 import swaggerJsdoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 import { fileURLToPath } from "url";
+import * as http from "http";
 
 export class Server {
   private app: Application;
+  private serverInstance: http.Server | null = null;
 
   constructor(
     public readonly port: number = 3000,
@@ -38,6 +40,15 @@ export class Server {
      *       - hibonutil
      *     produces:
      *       - application/octet-stream
+     *       - text/plain
+     *     parameters:
+     *       - in: query
+     *         name: format
+     *         schema:
+     *           type: string
+     *           enum: [octet-stream, base64]
+     *         required: false
+     *         description: Specify the format of the response. Options are 'octet-stream' (default) and 'base64'.
      *     requestBody:
      *       description: |
      *         JSON data to convert.
@@ -57,6 +68,12 @@ export class Server {
      *             examples:
      *               SampleHiBON:
      *                 $ref: '#/components/examples/sampleHiBON'
+     *           text/plain:
+     *             examples:
+     *               SampleBase64:
+     *                 $ref: '#/components/examples/sampleBase64'
+     *       400:
+     *         description: Bad Request. Invalid format specified
      *       413:
      *         description: Payload Too Large. The request entity exceeds server's limitations. Default size limit is 100kb
      *       500:
@@ -67,11 +84,24 @@ export class Server {
       const buffer = hibonutil.fromJSON(hibon.toJSONBuffer());
 
       if (buffer) {
-        // Send raw stream in response
-        res.setHeader("Content-Type", "application/octet-stream");
-        res.write(buffer);
-        res.status(200);
-        res.end();
+        const format = req.query.format;
+        if (format === "base64") {
+          const base64Data = buffer.toString("base64");
+          res.setHeader("Content-Type", "text/plain");
+          res.send(base64Data);
+        } else if (!format || format === "octet-stream") {
+          res.setHeader("Content-Type", "application/octet-stream");
+          res.write(buffer);
+        } else {
+          // Invalid format specified
+          res
+            .status(400)
+            .send(
+              `Invalid format '${format}'. Valid options are 'base64' or 'octet-stream'.`
+            );
+          return;
+        }
+        res.status(200).end();
       } else {
         res.status(500);
         res.send("Internal error in handling request");
@@ -225,12 +255,31 @@ export class Server {
     console.log(`Checking ${hibonutil.name}...`, installed);
 
     if (installed) {
-      this.app.listen(this.port, () => {
+      this.serverInstance = this.app.listen(this.port, () => {
         console.log(`Server listening on port ${this.port}`);
         if (this.trusted_mode) console.log(`Server started in trusted mode`);
       });
     } else {
       console.error(`Can't start server without ${hibonutil.name} installed!`);
     }
+  }
+
+  public async stop(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      if (this.serverInstance) {
+        this.serverInstance.close((err) => {
+          if (err) {
+            console.error("Error shutting down the server:", err);
+            reject(err);
+            return;
+          }
+          console.log("Server successfully closed");
+          resolve();
+        });
+      } else {
+        console.log("Server is not running");
+        resolve();
+      }
+    });
   }
 }
