@@ -17,8 +17,14 @@ components:
           TIME:
             - "time"
             - "2023-09-20T13:01:25.5186591"
-    sampleVerifyText: 
-      value: "TBD: some data about HiBON verification..."
+    sampleValid: 
+      value:
+        code: 0
+        output: ""
+    sampleInvalid: 
+      value:
+        code: 1
+        output: "Error: Invalid ISO Extended String: 200116T14:18:10.7747593"
     sampleDARTIndex:
       value:
         dartindex: "@4NFsU9l9xCcwbflc6wZiadg7hSz8LQmAzjnltp-i-Zs="

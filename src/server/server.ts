@@ -177,29 +177,26 @@ export class Server {
      *       200:
      *         description: Success
      *         content:
-     *           text/plain:
-     *             schema:
-     *               type: string
+     *           application/json:
      *             examples:
-     *               DummyText:
-     *                 $ref: '#/components/examples/sampleVerifyText'
+     *               ValidExample:
+     *                 $ref: '#/components/examples/sampleValid'
+     *               InvalidExample:
+     *                 $ref: '#/components/examples/sampleInvalid'
      *       413:
      *         description: Payload Too Large. The request entity exceeds server's limitations. Default size limit is 100kb
+     *       500:
+     *         description: Internal error in handling request
      */
     this.app.post("/hibonutil/validate", (req, res) => {
       const hibon = new HiBON(JSON.stringify(req.body));
-      const buffer = hibonutil.fromJSON(hibon.toJSONBuffer());
+      const executionResult = hibonutil.validateJSON(hibon);
 
-      if (buffer) {
-        res.type("text/plain");
-        res.send(
-          "We have no updated hibonutil yet, but HiBON you've sent valid, trust me\nHere's your buffer:\n" +
-            buffer.toString("utf8")
-        );
-        res.status(200);
+      if (executionResult) {
+        res.json(executionResult);
       } else {
-        res.send("I'm sorry, but your HiBON is malformed");
-        res.status(400);
+        res.status(500);
+        res.send("Internal error in handling request");
       }
     });
 

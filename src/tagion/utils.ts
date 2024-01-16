@@ -1,6 +1,17 @@
 import { execSync, spawnSync } from "child_process";
 import crypto from "crypto";
 
+// Remove ANSI escape codes that could be persent as formatting
+function stripAnsiRed(str: string): string {
+  // Matches ANSI escape codes for red and bright red color
+  const redAnsiRegex = /\x1B\[31;?1?m/g; // eslint-disable-line no-control-regex
+
+  // Matches ANSI reset code back to default
+  const resetAnsiRegex = /\x1B\[0m/g; // eslint-disable-line no-control-regex
+
+  return str.replace(redAnsiRegex, "").replace(resetAnsiRegex, "");
+}
+
 export interface ExecutionResult {
   code: number;
   output: string;
@@ -15,8 +26,18 @@ export function runBinary(binary: string, args: string[]): ExecutionResult {
     }).trim();
     result = { code: 0, output: console_output };
   } catch (error: unknown) {
-    if (error instanceof Error) result = { code: 1, output: error.message };
-    else result = { code: 1, output: "Unknown error" };
+    const err = error as {
+      code?: number;
+      message?: string;
+      stderr?: string;
+    };
+
+    const errorCode = err.code ?? 1;
+    const errorMessage = stripAnsiRed(
+      err.stderr?.trim() ?? err.message ?? "Unknown error"
+    );
+
+    result = { code: errorCode, output: errorMessage };
   }
 
   return result;

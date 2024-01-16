@@ -98,4 +98,34 @@ export class hibonutil {
       }
     }
   }
+
+  static validateJSON(json: HiBON): ExecutionResult | null {
+    const tempDir = os.tmpdir();
+    const tempFilePrefix = path.join(tempDir, generateTempFilename(""));
+
+    const tempJson = tempFilePrefix + "json";
+    const tempHibon = tempFilePrefix + "hibon";
+
+    try {
+      fs.writeFileSync(tempJson, json.toJSONBuffer());
+
+      // Convert JSON to HiBON and if doc is malformed error will be returned
+      return runBinary(this.name, [tempJson]);
+    } catch (error) {
+      console.error(error);
+      return null; // Unexpected error
+    } finally {
+      try {
+        if (fs.existsSync(tempJson)) {
+          fs.unlinkSync(tempJson);
+        }
+
+        if (fs.existsSync(tempHibon)) {
+          fs.unlinkSync(tempHibon);
+        }
+      } catch (cleanupError) {
+        console.error(`Error cleaning up temporary file: ${cleanupError}`);
+      }
+    }
+  }
 }
