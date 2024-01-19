@@ -95,6 +95,7 @@ export class Server {
 
           // Optionally remove padding '=' characters
           base64urlData = base64urlData.replace(/=+$/, "");
+          base64urlData = base64urlData + "==";
 
           res.setHeader("Content-Type", "text/plain");
           res.send(base64urlData);
