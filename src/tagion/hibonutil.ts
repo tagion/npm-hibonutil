@@ -50,7 +50,7 @@ export class hibonutil {
     }
   }
 
-  static getDARTIndex(json: HiBON): string | null {
+  static convertAndRun(json: HiBON, args: string): string | null {
     const tempDir = os.tmpdir();
     const tempFilePrefix = path.join(tempDir, generateTempFilename(""));
 
@@ -70,11 +70,11 @@ export class hibonutil {
         return null;
       }
 
-      // Get DART index from HiBON
-      result = runBinary(this.name, [tempHibon, "-ctH"]);
+      // Run given args with converted hibon
+      result = runBinary(this.name, [tempHibon, args]);
       if (result.code != 0) {
         console.error(
-          `Error calculating DART index of ${tempHibon}: ${result.output}`
+          `Error executing '${this.name} ${tempHibon} ${args}': ${result.output}`
         );
 
         return null;
@@ -97,6 +97,14 @@ export class hibonutil {
         console.error(`Error cleaning up temporary file: ${cleanupError}`);
       }
     }
+  }
+
+  static getDARTIndex(json: HiBON): string | null {
+    return this.convertAndRun(json, "-ctH");
+  }
+
+  static getHiBONBase64(json: HiBON): string | null {
+    return this.convertAndRun(json, "-ct");
   }
 
   static validateJSON(json: HiBON): ExecutionResult | null {
