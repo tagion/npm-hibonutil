@@ -86,9 +86,19 @@ export class Server {
       if (buffer) {
         const format = req.query.format;
         if (format === "base64") {
-          const base64Data = buffer.toString("base64");
+          const base64Data = "@" + buffer.toString("base64");
+
+          // Replace '+' with '-' and '/' with '_'
+          let base64urlData = base64Data
+            .replace(/\+/g, "-")
+            .replace(/\//g, "_");
+
+          // Optionally remove padding '=' characters
+          base64urlData = base64urlData.replace(/=+$/, "");
+          base64urlData = base64urlData + "==";
+
           res.setHeader("Content-Type", "text/plain");
-          res.send(base64Data);
+          res.send(base64urlData);
         } else if (!format || format === "octet-stream") {
           res.setHeader("Content-Type", "application/octet-stream");
           res.write(buffer);
