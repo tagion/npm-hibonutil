@@ -81,40 +81,36 @@ export class Server {
      */
     this.app.post("/hibonutil/convert", (req, res) => {
       const hibon = new HiBON(JSON.stringify(req.body));
-      const buffer = hibonutil.fromJSON(hibon.toJSONBuffer());
 
-      if (buffer) {
-        const format = req.query.format;
-        if (format === "base64") {
-          const base64Data = "@" + buffer.toString("base64");
-
-          // Replace '+' with '-' and '/' with '_'
-          let base64urlData = base64Data
-            .replace(/\+/g, "-")
-            .replace(/\//g, "_");
-
-          // Optionally remove padding '=' characters
-          base64urlData = base64urlData.replace(/=+$/, "");
-          base64urlData = base64urlData + "==";
-
-          res.setHeader("Content-Type", "text/plain");
-          res.send(base64urlData);
-        } else if (!format || format === "octet-stream") {
-          res.setHeader("Content-Type", "application/octet-stream");
-          res.write(buffer);
-        } else {
-          // Invalid format specified
-          res
-            .status(400)
-            .send(
-              `Invalid format '${format}'. Valid options are 'base64' or 'octet-stream'.`
-            );
+      const format = req.query.format;
+      if (format === "base64") {
+        const base64hibon = hibonutil.getHiBONBase64(hibon);
+        if (!base64hibon) {
+          res.status(500);
+          res.send("Internal error in handling request");
           return;
         }
+
+        res.setHeader("Content-Type", "text/plain");
+        res.send(base64hibon);
+      } else if (!format || format === "octet-stream") {
+        const buffer = hibonutil.fromJSON(hibon.toJSONBuffer());
+        if (!buffer) {
+          res.status(500);
+          res.send("Internal error in handling request");
+          return;
+        }
+
+        res.setHeader("Content-Type", "application/octet-stream");
+        res.write(buffer);
         res.status(200).end();
       } else {
-        res.status(500);
-        res.send("Internal error in handling request");
+        res
+          .status(400)
+          .send(
+            `Invalid format '${format}'. Valid options are 'base64' or 'octet-stream'.`
+          );
+        return;
       }
     });
 
