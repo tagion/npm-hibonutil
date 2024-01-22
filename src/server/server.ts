@@ -5,6 +5,7 @@ import swaggerJsdoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 import { fileURLToPath } from "url";
 import * as http from "http";
+import bodyParser from "body-parser";
 
 export class Server {
   private app: Application;
@@ -18,7 +19,7 @@ export class Server {
   }
 
   public defaultSettings() {
-    this.app.use(express.json());
+    this.app.use(bodyParser.json({ limit: "100kb" }));
 
     // Validate JSON and handle possible errors
     this.app.use(
