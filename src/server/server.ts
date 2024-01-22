@@ -19,7 +19,7 @@ export class Server {
   }
 
   public defaultSettings() {
-    this.app.use(bodyParser.json({ limit: "100kb" }));
+    this.app.use(bodyParser.json({ limit: "1mb" }));
 
     // Validate JSON and handle possible errors
     this.app.use(
