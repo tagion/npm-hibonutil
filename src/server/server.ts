@@ -75,7 +75,7 @@ export class Server {
      *       400:
      *         description: Bad Request. Invalid format specified
      *       413:
-     *         description: Payload Too Large. The request entity exceeds server's limitations. Default size limit is 100kb
+     *         description: Payload Too Large. The request entity exceeds server's limitations. Default size limit is 1mb
      *       500:
      *         description: Internal error in handling request
      */
@@ -143,7 +143,7 @@ export class Server {
      *               SampleDARTIndex:
      *                 $ref: '#/components/examples/sampleDARTIndex'
      *       413:
-     *         description: Payload Too Large. The request entity exceeds server's limitations. Default size limit is 100kb
+     *         description: Payload Too Large. The request entity exceeds server's limitations. Default size limit is 1mb
      *       500:
      *         description: Internal error in handling request
      */
@@ -190,7 +190,7 @@ export class Server {
      *               InvalidExample:
      *                 $ref: '#/components/examples/sampleInvalid'
      *       413:
-     *         description: Payload Too Large. The request entity exceeds server's limitations. Default size limit is 100kb
+     *         description: Payload Too Large. The request entity exceeds server's limitations. Default size limit is 1mb
      *       500:
      *         description: Internal error in handling request
      */
