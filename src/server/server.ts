@@ -3,8 +3,8 @@ import { HiBON } from "../hibon/HiBON.js";
 import { hibonutil } from "../tagion/hibonutil.js";
 import swaggerJsdoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
-import { fileURLToPath } from "url";
 import * as http from "http";
+import bodyParser from "body-parser";
 
 export class Server {
   private app: Application;
@@ -18,7 +18,7 @@ export class Server {
   }
 
   public defaultSettings() {
-    this.app.use(express.json());
+    this.app.use(bodyParser.json({ limit: "1mb" }));
 
     // Validate JSON and handle possible errors
     this.app.use(
@@ -244,9 +244,8 @@ export class Server {
         ],
         schemes: ["http"],
       },
-      apis: [fileURLToPath(import.meta.url)],
+      apis: ["src/server/server.ts", "src/server/swagger.yaml"],
     };
-    options.apis.push("src/server/swagger.yaml");
 
     const specs = swaggerJsdoc(options);
 
