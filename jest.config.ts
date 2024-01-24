@@ -18,6 +18,7 @@ const config: Config = {
   },
   preset: "ts-jest/presets/default-esm",
   testEnvironment: "node",
+  testPathIgnorePatterns: ["<rootDir>/__tests__/res/"],
 };
 
 export default config;

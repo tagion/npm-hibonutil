@@ -6,14 +6,26 @@ import swaggerUi from "swagger-ui-express";
 import * as http from "http";
 import bodyParser from "body-parser";
 
+export const DEFAULT_PROD_PORT: number = 3000;
+export const DEFAULT_TEST_PORT: number = 3001;
+
+function defaultPort(): number {
+  return process.env.NODE_ENV === "test"
+    ? DEFAULT_TEST_PORT
+    : DEFAULT_PROD_PORT;
+}
+
 export class Server {
   private app: Application;
   private serverInstance: http.Server | null = null;
 
-  constructor(
-    public readonly port: number = 3000,
-    public readonly trusted_mode = false
-  ) {
+  public readonly port: number = defaultPort();
+  public readonly trusted_mode: boolean = false;
+
+  constructor(port?: number, trusted_mode?: boolean) {
+    if (port) this.port = port;
+    if (trusted_mode) this.trusted_mode = trusted_mode;
+
     this.app = express();
   }
 
