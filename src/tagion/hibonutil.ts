@@ -100,7 +100,7 @@ export class hibonutil {
   }
 
   static getDARTIndex(json: HiBON): string | null {
-    return this.convertAndRun(json, "-ctH");
+    return this.convertAndRun(json, "-ctD");
   }
 
   static getHiBONBase64(json: HiBON): string | null {
