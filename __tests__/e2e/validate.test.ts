@@ -4,22 +4,6 @@ import axios from "axios";
 
 const server: Server = new Server();
 const VALIDATE_URL = `http://localhost:${server.port}/hibonutil/validate`;
-let consoleSpy: jest.SpyInstance;
-
-beforeAll(async () => {
-  // Disable console.log
-  consoleSpy = jest.spyOn(console, "log").mockImplementation(() => {});
-
-  server.defaultSettings();
-  server.start();
-});
-
-afterAll(async () => {
-  await server.stop();
-
-  // Enable console.log after tests
-  consoleSpy.mockRestore();
-});
 
 describe("Test /validate endpoint", () => {
   it("should return no error for valid JSON", async () => {
