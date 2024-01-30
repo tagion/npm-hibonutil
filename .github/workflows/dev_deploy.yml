@@ -25,6 +25,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
+      - name: Install PM2 globally
+        run: npm install pm2 -g
+
       - name: Install Dependencies
         run: npm install
 
