@@ -33,7 +33,7 @@ jobs:
 
       - name: Install hibonutil
         env:
-          GH_TOKEN: ${{ env.GITBOT_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITBOT_TOKEN }}
         run: |
           mkdir -p artifact
           cd artifact
