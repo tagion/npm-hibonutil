@@ -4,7 +4,7 @@ tsc
 pm2 start ecosystem.config.cjs
 
 echo "Wait for server to start..."
-sleep 2
+sleep 5
 
 npx jest
 exit_code=$?
