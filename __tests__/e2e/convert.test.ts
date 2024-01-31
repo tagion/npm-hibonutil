@@ -5,7 +5,7 @@ import axios from "axios";
 const server: Server = new Server();
 const CONVERT_URL = `http://localhost:${server.port}/hibonutil/convert`;
 
-describe("Test /convert endpoint", () => {
+describe("Test /convert endpoint", async () => {
   it("should return correct data in default format", async () => {
     const response = await axios.post(CONVERT_URL, res.inputJSON);
     expect(response.status).toBe(200);
