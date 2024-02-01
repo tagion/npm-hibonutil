@@ -128,6 +128,46 @@ export class Server {
 
     /**
      * @swagger
+     * /hibonutil/convert/tojson:
+     *   post:
+     *     summary: Convert HiBON format to JSON
+     *     tags:
+     *       - hibonutil
+     *     consumes:
+     *       - application/octet-stream
+     *     produces:
+     *       - application/json
+     *     requestBody:
+     *       description: |
+     *         HiBON binary data to convert to JSON.
+     *
+     *         *The body size should be less than 100kb*
+     *       required: true
+     *       content:
+     *         application/octet-stream:
+     *           schema:
+     *             type: string
+     *             format: binary
+     *             description: HiBON binary data.
+     *     responses:
+     *       200:
+     *         description: Success - returns the converted JSON data.
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               description: JSON representation of the input data.
+     *       501:
+     *         description: Not Implemented - this endpoint is in development and will be implemented soon.
+     */
+    this.app.post("/hibonutil/convert/tojson", (req, res) => {
+      res
+        .status(501)
+        .send("This endpoint is in development and will be implemented soon.");
+    });
+
+    /**
+     * @swagger
      * /hibonutil/convert:
      *   post:
      *     summary: Convert JSON to HiBON format (Deprecated - will be disabled on 15-Feb-2024)
