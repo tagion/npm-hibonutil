@@ -25,6 +25,10 @@ export class hibonutil {
     return runBinary(this.name, ["--sample"]);
   }
 
+  static version() {
+    return runBinary(this.name, ["--version"]);
+  }
+
   static fromJSON(buffer: Buffer, pretty: boolean = true): Buffer | null {
     const tempDir = os.tmpdir();
     const tempFilePath = path.join(tempDir, generateTempFilename("json"));

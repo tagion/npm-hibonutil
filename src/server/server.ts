@@ -45,7 +45,7 @@ export class Server {
 
     /**
      * @swagger
-     * /hibonutil/convert:
+     * /hibonutil/convert/tohibon:
      *   post:
      *     summary: Convert JSON to HiBON format
      *     tags:
@@ -91,7 +91,98 @@ export class Server {
      *       500:
      *         description: Internal error in handling request
      */
+    this.app.post("/hibonutil/convert/tohibon", (req, res) => {
+      const hibon = new HiBON(JSON.stringify(req.body));
+
+      const format = req.query.format;
+      if (format === "base64") {
+        const base64hibon = hibonutil.getHiBONBase64(hibon);
+        if (!base64hibon) {
+          res.status(500);
+          res.send("Internal error in handling request");
+          return;
+        }
+
+        res.setHeader("Content-Type", "text/plain");
+        res.send(base64hibon);
+      } else if (!format || format === "octet-stream") {
+        const buffer = hibonutil.fromJSON(hibon.toJSONBuffer());
+        if (!buffer) {
+          res.status(500);
+          res.send("Internal error in handling request");
+          return;
+        }
+
+        res.setHeader("Content-Type", "application/octet-stream");
+        res.write(buffer);
+        res.status(200).end();
+      } else {
+        res
+          .status(400)
+          .send(
+            `Invalid format '${format}'. Valid options are 'base64' or 'octet-stream'.`
+          );
+        return;
+      }
+    });
+
+    /**
+     * @swagger
+     * /hibonutil/convert:
+     *   post:
+     *     summary: Convert JSON to HiBON format (Deprecated - will be disabled on 15-Feb-2024)
+     *     deprecated: true
+     *     description: |
+     *       This endpoint is deprecated and will be disabled on 15-Feb-2024. Please migrate to /convert/tohibon or /convert/tojson.
+     *     tags:
+     *       - hibonutil
+     *     produces:
+     *       - application/octet-stream
+     *       - text/plain
+     *     parameters:
+     *       - in: query
+     *         name: format
+     *         schema:
+     *           type: string
+     *           enum: [octet-stream, base64]
+     *         required: false
+     *         description: Specify the format of the response. Options are 'octet-stream' (default) and 'base64'.
+     *     requestBody:
+     *       description: |
+     *         JSON data to convert.
+     *
+     *         *The body size should be less than 100kb*
+     *       required: true
+     *       content:
+     *         application/json:
+     *           examples:
+     *             SampleJSON:
+     *               $ref: '#/components/examples/sampleJson'
+     *     responses:
+     *       200:
+     *         description: Success
+     *         content:
+     *           application/octet-stream:
+     *             examples:
+     *               SampleHiBON:
+     *                 $ref: '#/components/examples/sampleHiBON'
+     *           text/plain:
+     *             examples:
+     *               SampleBase64:
+     *                 $ref: '#/components/examples/sampleBase64'
+     *       400:
+     *         description: Bad Request. Invalid format specified
+     *       413:
+     *         description: Payload Too Large. The request entity exceeds server's limitations. Default size limit is 1mb
+     *       500:
+     *         description: Internal error in handling request
+     */
     this.app.post("/hibonutil/convert", (req, res) => {
+      res.setHeader(
+        "Warning",
+        '299 - "Deprecated API: This endpoint is deprecated and will be disabled on 15-Feb-2024. Please migrate to /convert/tohibon or /convert/tojson."'
+      );
+
       const hibon = new HiBON(JSON.stringify(req.body));
 
       const format = req.query.format;
