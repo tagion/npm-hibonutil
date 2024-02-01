@@ -7,7 +7,7 @@ import {
 import os from "os";
 import path from "path";
 import fs from "fs";
-import { HiBON } from "../hibon/HiBON.js";
+import { HiBON, HiBONExtension } from "../hibon/HiBON.js";
 
 export class hibonutil {
   readonly name: string = "hibonutil";
@@ -29,17 +29,17 @@ export class hibonutil {
     return runBinary(this.name, ["--version"]);
   }
 
-  static fromJSON(buffer: Buffer, pretty: boolean = true): Buffer | null {
+  private static writeFileAndRun(
+    extension: string,
+    buffer: Buffer
+  ): Buffer | null {
     const tempDir = os.tmpdir();
-    const tempFilePath = path.join(tempDir, generateTempFilename("json"));
+    const tempFilePath = path.join(tempDir, generateTempFilename(extension));
 
     try {
-      fs.writeFileSync(tempFilePath, buffer);
+      fs.writeFileSync(tempFilePath, buffer, "binary");
 
-      return runBinaryWithBuffer(this.name, [
-        pretty ? "-pc" : "-c",
-        tempFilePath,
-      ]);
+      return runBinaryWithBuffer(this.name, ["-c", tempFilePath]);
     } catch (error) {
       console.error(error);
       return null;
@@ -54,12 +54,20 @@ export class hibonutil {
     }
   }
 
-  static convertAndRun(json: HiBON, args: string): string | null {
+  static toHiBON(buffer: Buffer): Buffer | null {
+    return this.writeFileAndRun(HiBONExtension.json, buffer);
+  }
+
+  static toJSON(buffer: Buffer): Buffer | null {
+    return this.writeFileAndRun(HiBONExtension.hibon, buffer);
+  }
+
+  private static convertAndRun(json: HiBON, args: string): string | null {
     const tempDir = os.tmpdir();
     const tempFilePrefix = path.join(tempDir, generateTempFilename(""));
 
-    const tempJson = tempFilePrefix + "json";
-    const tempHibon = tempFilePrefix + "hibon";
+    const tempJson = tempFilePrefix + HiBONExtension.json;
+    const tempHibon = tempFilePrefix + HiBONExtension.hibon;
 
     try {
       fs.writeFileSync(tempJson, json.toJSONBuffer());
@@ -115,8 +123,8 @@ export class hibonutil {
     const tempDir = os.tmpdir();
     const tempFilePrefix = path.join(tempDir, generateTempFilename(""));
 
-    const tempJson = tempFilePrefix + "json";
-    const tempHibon = tempFilePrefix + "hibon";
+    const tempJson = tempFilePrefix + HiBONExtension.json;
+    const tempHibon = tempFilePrefix + HiBONExtension.hibon;
 
     try {
       fs.writeFileSync(tempJson, json.toJSONBuffer());

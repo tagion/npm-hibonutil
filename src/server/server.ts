@@ -31,6 +31,10 @@ export class Server {
 
   public defaultSettings() {
     this.app.use(bodyParser.json({ limit: "1mb" }));
+    this.app.use(
+      "/hibonutil/convert/tojson",
+      express.raw({ type: "application/octet-stream" })
+    );
 
     // Validate JSON and handle possible errors
     this.app.use(
@@ -65,7 +69,7 @@ export class Server {
      *       description: |
      *         JSON data to convert.
      *
-     *         *The body size should be less than 100kb*
+     *         *The body size should be less than 1mb*
      *       required: true
      *       content:
      *         application/json:
@@ -106,7 +110,7 @@ export class Server {
         res.setHeader("Content-Type", "text/plain");
         res.send(base64hibon);
       } else if (!format || format === "octet-stream") {
-        const buffer = hibonutil.fromJSON(hibon.toJSONBuffer());
+        const buffer = hibonutil.toHiBON(hibon.toJSONBuffer());
         if (!buffer) {
           res.status(500);
           res.send("Internal error in handling request");
@@ -130,7 +134,7 @@ export class Server {
      * @swagger
      * /hibonutil/convert/tojson:
      *   post:
-     *     summary: Convert HiBON format to JSON
+     *     summary: Convert HiBON binary format to JSON
      *     tags:
      *       - Convert
      *     consumes:
@@ -141,7 +145,7 @@ export class Server {
      *       description: |
      *         HiBON binary data to convert to JSON.
      *
-     *         *The body size should be less than 100kb*
+     *         *The body size should be less than 1mb*
      *       required: true
      *       content:
      *         application/octet-stream:
@@ -157,13 +161,21 @@ export class Server {
      *             schema:
      *               type: object
      *               description: JSON representation of the input data.
-     *       501:
-     *         description: Not Implemented - this endpoint is in development and will be implemented soon.
+     *       400:
+     *         description: Bad Request. Invalid input format or data.
+     *       413:
+     *         description: Payload Too Large. The request entity exceeds server's limitations. Default size limit is 1mb.
+     *       500:
+     *         description: Internal error in handling request.
      */
     this.app.post("/hibonutil/convert/tojson", (req, res) => {
-      res
-        .status(501)
-        .send("This endpoint is in development and will be implemented soon.");
+      const json_buffer = hibonutil.toJSON(req.body);
+      if (!json_buffer) {
+        res.status(500).send("Internal error in handling request");
+        return;
+      }
+      res.setHeader("Content-Type", "application/json");
+      res.json(JSON.parse(json_buffer.toString("utf8")));
     });
 
     /**
@@ -191,7 +203,7 @@ export class Server {
      *       description: |
      *         JSON data to convert.
      *
-     *         *The body size should be less than 100kb*
+     *         *The body size should be less than 1mb*
      *       required: true
      *       content:
      *         application/json:
@@ -237,7 +249,7 @@ export class Server {
         res.setHeader("Content-Type", "text/plain");
         res.send(base64hibon);
       } else if (!format || format === "octet-stream") {
-        const buffer = hibonutil.fromJSON(hibon.toJSONBuffer());
+        const buffer = hibonutil.toHiBON(hibon.toJSONBuffer());
         if (!buffer) {
           res.status(500);
           res.send("Internal error in handling request");
@@ -270,7 +282,7 @@ export class Server {
      *       description: |
      *         JSON data to calculate.
      *
-     *         *The body size should be less than 100kb*
+     *         *The body size should be less than 1mb*
      *       required: true
      *       content:
      *         application/json:
@@ -315,7 +327,7 @@ export class Server {
      *       description: |
      *         JSON data to verify.
      *
-     *         *The body size should be less than 100kb*
+     *         *The body size should be less than 1mb*
      *       required: true
      *       content:
      *         application/json:

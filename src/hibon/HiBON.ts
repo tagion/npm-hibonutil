@@ -13,6 +13,11 @@ export enum HiBONType {
   HIBON = "hibon",
 }
 
+export enum HiBONExtension {
+  hibon = "hibon",
+  json = "json",
+}
+
 type PrimitiveValue = string | boolean | number;
 type ValueType = PrimitiveValue | [string, PrimitiveValue] | HiBONJSON;
 

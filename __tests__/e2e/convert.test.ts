@@ -5,9 +5,11 @@ import axios from "axios";
 const server: Server = new Server();
 const CONVERT_URL = `http://localhost:${server.port}/hibonutil/convert`;
 
-describe("Test /convert endpoint", () => {
+describe("Test /convert/tohibon endpoint", () => {
+  const CONVERT_TOHIBON_URL = CONVERT_URL + "/tohibon";
+
   it("should return correct data in default format", async () => {
-    const response = await axios.post(CONVERT_URL, res.inputJSON);
+    const response = await axios.post(CONVERT_TOHIBON_URL, res.sampleJSON);
     expect(response.status).toBe(200);
     const responseBodyHex = Buffer.from(response.data).toString("hex");
     expect(responseBodyHex).toBe(res.outputHexForJSON);
@@ -15,8 +17,8 @@ describe("Test /convert endpoint", () => {
 
   it("should return correct data in octet-stream format", async () => {
     const response = await axios.post(
-      CONVERT_URL + "?format=octet-stream",
-      res.inputJSON
+      CONVERT_TOHIBON_URL + "?format=octet-stream",
+      res.sampleJSON
     );
     expect(response.status).toBe(200);
     const responseBodyHex = Buffer.from(response.data).toString("hex");
@@ -25,22 +27,47 @@ describe("Test /convert endpoint", () => {
 
   it("should return correct data in base64 format", async () => {
     const response = await axios.post(
-      `${CONVERT_URL}?format=base64`,
-      res.inputJSON
+      `${CONVERT_TOHIBON_URL}?format=base64`,
+      res.sampleJSON
     );
     expect(response.status).toBe(200);
     expect(response.data).toBe(res.outputBase64ForJSON);
   });
 
   it("should return empty body for invalid JSON", async () => {
-    const response = await axios.post(`${CONVERT_URL}`, res.inputInvalidTime);
+    const response = await axios.post(
+      `${CONVERT_TOHIBON_URL}`,
+      res.inputInvalidTime
+    );
     expect(response.status).toBe(200);
     expect(response.data).toBe("");
   });
 
   it("should return correct response for empty JSON", async () => {
-    const response = await axios.post(`${CONVERT_URL}?format=base64`, {});
+    const response = await axios.post(
+      `${CONVERT_TOHIBON_URL}?format=base64`,
+      {}
+    );
     expect(response.status).toBe(200);
     expect(response.data).toBe(res.outputBase64EmptyJSON);
+  });
+});
+
+describe("Test /convert/tojson endpoint", () => {
+  const CONVERT_TOJSON_URL = CONVERT_URL + "/tojson";
+
+  it("should return correct JSON", async () => {
+    const response = await axios.post(
+      CONVERT_TOJSON_URL,
+      res.sampleHiBONBuffer,
+      {
+        headers: {
+          "Content-Type": "application/octet-stream",
+        },
+      }
+    );
+
+    expect(response.status).toBe(200);
+    expect(response.data).toEqual(res.sampleJSON);
   });
 });
