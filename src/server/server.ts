@@ -49,7 +49,7 @@ export class Server {
      *   post:
      *     summary: Convert JSON to HiBON format
      *     tags:
-     *       - hibonutil
+     *       - Convert
      *     produces:
      *       - application/octet-stream
      *       - text/plain
@@ -132,7 +132,7 @@ export class Server {
      *   post:
      *     summary: Convert HiBON format to JSON
      *     tags:
-     *       - hibonutil
+     *       - Convert
      *     consumes:
      *       - application/octet-stream
      *     produces:
@@ -175,7 +175,7 @@ export class Server {
      *     description: |
      *       This endpoint is deprecated and will be disabled on 15-Feb-2024. Please migrate to /convert/tohibon or /convert/tojson.
      *     tags:
-     *       - hibonutil
+     *       - Convert
      *     produces:
      *       - application/octet-stream
      *       - text/plain
@@ -263,7 +263,7 @@ export class Server {
      *   post:
      *     summary: Calculate DART index of HiBONJSON
      *     tags:
-     *       - hibonutil
+     *       - DART Index
      *     produces:
      *       - application/json
      *     requestBody:
@@ -308,7 +308,7 @@ export class Server {
      *   post:
      *     summary: Validate HiBON JSON with hibonutil
      *     tags:
-     *       - hibonutil
+     *       - Validate
      *     produces:
      *       - text/plain
      *     requestBody:
@@ -378,12 +378,6 @@ export class Server {
           { url: "https://test-hibon.tagion.org" },
           { url: "https://dev-hibon.tagion.org" },
           { url: `http://localhost:${this.port}` },
-        ],
-        tags: [
-          {
-            name: "hibonutil",
-            description: "Operations related to hibonutil tool",
-          },
         ],
         schemes: ["http"],
       },
