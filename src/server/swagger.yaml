@@ -28,3 +28,14 @@ components:
     sampleDARTIndex:
       value:
         dartindex: "@4NFsU9l9xCcwbflc6wZiadg7hSz8LQmAzjnltp-i-Zs="
+    version:
+      value: |
+        git: git@github.com:tagion/tagion.git
+        branch: HEAD
+        hash: 7339653f5a55046171951f1d69e1a481f81981d5
+        revno: 12812
+        build_date: 2023-12-04 16:00
+        builder_name: Ze bot
+        builder_email: gitbot@decard.io
+        CC: cc (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0
+        DC: DMD64 D Compiler v2.105.2

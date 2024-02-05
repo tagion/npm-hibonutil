@@ -361,6 +361,39 @@ export class Server {
       }
     });
 
+    /**
+     * @swagger
+     * /hibonutil/version:
+     *   get:
+     *     summary: Get the version of hibonutil
+     *     tags:
+     *       - Utils
+     *     produces:
+     *       - text/plain
+     *     description: Returns the information about current version of the hibonutil tool.
+     *     responses:
+     *       200:
+     *         description: Success
+     *         content:
+     *           text/plain:
+     *             examples:
+     *               VersionExample:
+     *                 $ref: '#/components/examples/version'
+     *       500:
+     *         description: Internal server error.
+     */
+    this.app.get("/hibonutil/version", (_, res) => {
+      const executionResult = hibonutil.version();
+
+      if (executionResult) {
+        res.setHeader("Content-Type", "text/plain");
+        res.status(200).send(executionResult.output);
+      } else {
+        res.status(500);
+        res.send("Internal error in handling request");
+      }
+    });
+
     // Enable shutting down server with request only in trusted mode
     if (this.trusted_mode) {
       this.app.use("/stop", (_, res) => {
