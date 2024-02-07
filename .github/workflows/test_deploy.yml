@@ -10,7 +10,51 @@ env:
   PROJECT_NAME: test-hibon-service
 
 jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Cache node modules
+        uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install PM2 globally
+        run: npm install pm2 -g
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Install hibonutil
+        env:
+          GH_TOKEN: ${{ secrets.GITBOT_TOKEN }}
+        run: |
+          mkdir -p artifact
+          cd artifact
+
+          gh release download v1.0.0 --repo tagion/tagion --pattern "successful_artifact.zip"
+
+          unzip successful_artifact.zip
+          rm -r successful_artifact.zip
+
+          tar -xzf *.tar.gz
+          rm -r *.tar.gz
+          cd build/x86_64-linux/bin
+          ln -s tagion hibonutil
+          chmod +x hibonutil
+          cp hibonutil /usr/local/bin/
+
+      - name: Run Jest Tests
+        run: npm test
+
   deploy:
+    needs: test
     name: Build Image
     runs-on: ubuntu-latest
 
