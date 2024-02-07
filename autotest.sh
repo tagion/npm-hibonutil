@@ -4,10 +4,9 @@ tsc
 pm2 start ecosystem.config.cjs
 
 echo "Wait for server to start..."
-sleep 5
+sleep 2
 
-# npx jest
-echo "IMPORTANT: skipping test unitl fixed"
+npx jest
 exit_code=$?
 
 pm2 delete hibon-server
