@@ -8,21 +8,22 @@ const CONVERT_URL = `http://localhost:${server.port}/hibonutil/convert`;
 describe("Test /convert/tohibon endpoint", () => {
   const CONVERT_TOHIBON_URL = CONVERT_URL + "/tohibon";
 
-  it.skip("should return correct data in default format", async () => {
-    const response = await axios.post(CONVERT_TOHIBON_URL, res.sampleJSON);
+  it("should return correct data in default format", async () => {
+    const response = await axios.post(CONVERT_TOHIBON_URL, res.sampleJSON, {
+      responseType: "arraybuffer",
+    });
     expect(response.status).toBe(200);
-    const responseBodyHex = Buffer.from(response.data).toString("hex");
-    expect(responseBodyHex).toBe(res.sampleHiBONHex);
+    expect(Buffer.from(response.data)).toEqual(res.sampleHiBONBuffer);
   });
 
-  it.skip("should return correct data in octet-stream format", async () => {
+  it("should return correct data in octet-stream format", async () => {
     const response = await axios.post(
       CONVERT_TOHIBON_URL + "?format=octet-stream",
-      res.sampleJSON
+      res.sampleJSON,
+      { responseType: "arraybuffer" }
     );
     expect(response.status).toBe(200);
-    const responseBodyHex = Buffer.from(response.data).toString("hex");
-    expect(responseBodyHex).toBe(res.sampleHiBONHex);
+    expect(Buffer.from(response.data)).toEqual(res.sampleHiBONBuffer);
   });
 
   it("should return correct data in base64 format", async () => {
