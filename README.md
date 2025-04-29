@@ -1,3 +1,6 @@
+> [!IMPORTANT]
+> MOVED -> https://gitlab.com/decard/backend-services/npm-hibonutil#
+
 # HiBON-wrapper for NPM / HiBON service
 
 This project is planned as NPM module SDK for HiBON using `hibonutil`.<br>
